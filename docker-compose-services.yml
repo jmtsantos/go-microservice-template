@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  postgres:
+    image: "postgres:9.6"
+    container_name: "postgres"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=changeme
+    restart: always
+
+  rabbit:
+    image: rabbitmq:3.7.12-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "14269"
+      - "5778:5778"
+      - "14268:14268"
+      - "14267"
+      - "16686:16686"
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      
+  consul:
+    image: consul:latest
+    ports:
+      - "8300:8300"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+
+networks:
+  default:
+    external:
+      name: template-network
